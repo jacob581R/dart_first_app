@@ -1,48 +1,53 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:dart_application_3/dart_application_3.dart'
     as dart_application_3;
 
 void main(List<String> arguments) {
-  // Initialize an empty list to store grades
-  List<int> grades = [];
-
-  // Ask the user how many grades they want to enter
-  print('How many grades do you want to enter?');
-  int numberOfGrades = int.parse(stdin.readLineSync()!);
-
-  // Loop to get grades from the user
-  for (int i = 0; i < numberOfGrades; i++) {
-    int grade;
-    while (true) {
-      // Prompt the user to enter a grade
-      print('Enter grade ${i + 1} (between 0 and 100):');
-      grade = int.parse(stdin.readLineSync()!);
-
-      // Check if the grade is between 0 and 100
-      if (grade >= 0 && grade <= 100) {
-        grades.add(grade); // Insert the valid grade into the list
-        break; // Exit the loop since the grade is valid
-      } else {
-        print('Invalid grade. Please enter a grade between 0 and 100.');
-      }
+  // intilaizing todolist
+  List<String> todolist = [];
+  // intilaizing completedlist
+  List<String> completedTasks = [];
+  print(
+      "you can write done to finish OR write delete to marks a specific task");
+  while (true) {
+    print("Enter the name of task");
+    String? currentTask = stdin.readLineSync()!;
+    if (currentTask == 'done') {
+      break;
     }
+    // Removing task
+    if (currentTask == 'delete') {
+      print("Enter the number of task you wish to delete");
+      int? currentDeltedTask = int.parse(stdin.readLineSync()!);
+      if (currentDeltedTask <= todolist.length) {
+        delteSpecificSask(currentDeltedTask, todolist, completedTasks);
+      }
+      break;
+    }
+    addTodoList(currentTask, todolist);
   }
-// print the average of the grades
-  int totalSum = 0;
-  double totalAvg = 0;
-  for (int i = 0; i < grades.length; i++) {
-    totalSum = totalSum + grades[i];
+  print("TO DO LIST");
+  displayTodoList(todolist);
+  print("COMPLETED TASKS");
+  displayTodoList(completedTasks);
+}
+
+// Add new task to do list
+void addTodoList(String task, List tasks) {
+  tasks.add(task);
+}
+
+// display all the tasks
+void displayTodoList(List tasks) {
+  for (var task in tasks) {
+    print(task);
   }
-  totalAvg = totalSum / grades.length;
-  print('the average is ${totalAvg}');
-  if (totalAvg > 60) {
-    print("the result succses");
-  } else {
-    print('the result failure');
-  }
-  // Print the list of grades
-  print('List of grades:');
-  for (var grade in grades) {
-    print(grade);
-  }
+}
+
+// delete specific task
+void delteSpecificSask(int numberOfTask, List tasks, List completedTasks) {
+  // Adding the removing tasks to a new list
+  completedTasks.add(tasks[numberOfTask - 1]);
+  tasks.removeAt(numberOfTask - 1);
 }
